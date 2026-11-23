@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MPI Barisan dan Deret Aritmetika</title>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--b1:#d9f5ff;--b2:#f6e6ff;--ink:#1b2a4a;--card:#ffffffe6;--p:#6c5ce7;--q:#00b8d9;--ok:#00b894;--bad:#e17055;--y:#fdcb6e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--b1:#0f1838;--b2:#2b1654;--ink:#eef2ff;--card:#1d2650e6}}
+:root[data-theme="dark"]{--b1:#0f1838;--b2:#2b1654;--ink:#eef2ff;--card:#1d2650e6}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:"Trebuchet MS",Verdana,sans-serif;color:var(--ink);background:linear-gradient(135deg,var(--b1),var(--b2));overflow-x:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(40px);opacity:.45;z-index:0;animation:fl 9s ease-in-out infinite alternate}
+.o1{width:260px;height:260px;background:var(--q);top:-60px;left:-60px}.o2{width:300px;height:300px;background:var(--p);bottom:-80px;right:-60px;animation-delay:-4s}
+@keyframes fl{to{transform:translate(40px,30px)}}
+.app{position:relative;z-index:1;max-width:1100px;margin:auto;min-height:100vh;display:flex;flex-direction:column;gap:10px;padding:10px}
+.top{display:flex;align-items:center;gap:8px}.top h2{margin:0;font-size:clamp(13px,2.4vw,18px);flex:1}
+.stage{flex:1;aspect-ratio:16/9;background:var(--card);border-radius:22px;box-shadow:0 12px 0 #6c5ce733,0 20px 40px #0002;padding:clamp(12px,2.5vw,28px);overflow:auto;border:2px solid #fff8}
+.b{font:inherit;font-weight:700;color:#fff;background:linear-gradient(180deg,#8e7bff,var(--p));border:0;border-bottom:5px solid #4a3cb5;border-radius:14px;padding:10px 18px;cursor:pointer;transition:transform .1s}
+.b:active{transform:translateY(3px);border-bottom-width:2px}.b.g{background:linear-gradient(180deg,#2fd9b8,var(--ok));border-bottom-color:#00806a}.b.r{background:linear-gradient(180deg,#ff9a7a,var(--bad));border-bottom-color:#a8452c}
+.sm{font:inherit;border:0;background:var(--q);color:#fff;border-radius:8px;padding:4px 9px;cursor:pointer;margin-left:4px}
+.cover{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:100%}
+.ttl{font-size:clamp(26px,6vw,56px);margin:0;line-height:1.1}.ttl span{display:inline-block;animation:bn 2s ease-in-out infinite;background:linear-gradient(var(--p),var(--q));-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes bn{50%{transform:translateY(-8px)}}
+.go{font-size:clamp(20px,4vw,32px);padding:14px 44px;animation:pl 1.4s infinite}@keyframes pl{50%{transform:scale(1.07)}}
+.cube{width:80px;height:80px;position:relative;transform-style:preserve-3d;animation:rot 9s linear infinite;margin:26px auto}
+.cube i{position:absolute;inset:0;display:grid;place-items:center;font:700 30px serif;color:#fff;background:linear-gradient(135deg,var(--p),var(--q));border:2px solid #fff9;opacity:.9}
+.cube i:nth-child(1){transform:translateZ(40px)}.cube i:nth-child(2){transform:rotateY(90deg) translateZ(40px)}.cube i:nth-child(3){transform:rotateY(180deg) translateZ(40px)}.cube i:nth-child(4){transform:rotateY(-90deg) translateZ(40px)}.cube i:nth-child(5){transform:rotateX(90deg) translateZ(40px)}.cube i:nth-child(6){transform:rotateX(-90deg) translateZ(40px)}
+@keyframes rot{to{transform:rotateX(360deg) rotateY(360deg)}}
+input,select{font:inherit;width:100%;padding:10px;border-radius:12px;border:2px solid var(--p);margin:4px 0 12px;background:#fff;color:#1b2a4a}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.mc{background:#fff;color:#1b2a4a;border-radius:18px;padding:16px;text-align:center;font-weight:700;cursor:pointer;border:0;border-bottom:6px solid #c9c2ff;font:inherit;font-weight:700;transition:transform .15s}
+.mc:hover{transform:translateY(-4px) rotate(-1deg)}.mc big{display:block;font-size:34px}
+.nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tag{display:inline-block;background:var(--y);color:#533;border-radius:99px;padding:2px 12px;font-weight:700;font-size:13px}
+.stim{background:#eaf7ff;color:#1b2a4a;border-left:6px solid var(--q);padding:10px 14px;border-radius:10px;margin:8px 0}
+.stim table{border-collapse:collapse}.stim td,.stim th{border:1px solid #7bb;padding:4px 12px}
+.op{display:block;background:#fff;color:#1b2a4a;border:2px solid #d8d4ff;border-radius:12px;padding:8px 12px;margin:6px 0;cursor:pointer}
+.slot{display:inline-block;min-width:60px;text-align:center;border:2px dashed var(--p);border-radius:10px;padding:2px 10px;margin:0 4px;background:#fff;color:#1b2a4a;cursor:pointer}
+.bank{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.chip{font:inherit;font-weight:700;border:0;border-radius:12px;padding:8px 16px;background:var(--y);color:#533;cursor:grab;border-bottom:4px solid #d9a441}
+.chip.sel{outline:3px solid var(--p)}.chip.used{opacity:.35}
+.mr,.or{display:flex;align-items:center;gap:10px;background:#fff;color:#1b2a4a;border-radius:12px;padding:8px 12px;margin:6px 0}.mr span,.or span{flex:1}.mr select{width:140px;margin:0}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;color:#1b2a4a}.okb{background:#c8f7e8}.badb{background:#ffe0d6}.bad{color:var(--bad);font-weight:700}
+.row{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.f{background:#fff;color:#1b2a4a;padding:8px 12px;border-radius:10px;margin:8px 0;overflow-x:auto}
+.big{font-size:clamp(44px,10vw,90px);font-weight:900;color:var(--p)}
+</style></head><body>
+<div class="orb o1"></div><div class="orb o2"></div>
+<div class="app">
+<div class="top"><h2>📐 MPI Barisan &amp; Deret Aritmetika</h2><button class="b g" id="mb" onclick="music(!mus)" title="Musik">🔇</button><button class="b r" onclick="init()" title="Reset">↺ Reset</button></div>
+<main class="stage" id="v"></main>
+<div class="nav" id="nav"><button class="b" onclick="go('menu')">🗺 Menu</button><button class="b" onclick="go('pet')">❓ Petunjuk</button><button class="b" onclick="go('dev')">👩‍🏫 Pengembang</button></div>
+</div>
+<script>
+const $=s=>document.querySelector(s),shuf=a=>[...a].sort(()=>Math.random()-.5);
+const tx=()=>{try{window.MathJax&&MathJax.typesetPromise&&MathJax.typesetPromise([$('#v')]).catch(()=>{})}catch(e){}};
+let S,cur,AC,mus=false,tm,ni=0,sel=null;
+/* Audio */
+const nt=[261.6,329.6,392,523.3,392,329.6,293.7,349.2,440,587.3,440,349.2];
+function tone(f,d,v,t){if(!AC||!mus)return;const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,AC.currentTime);g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}
+function music(on){clearInterval(tm);mus=on;$('#mb').textContent=on?'🎵':'🔇';if(on){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume();tm=setInterval(()=>tone(nt[ni++%nt.length],.5,.03,'triangle'),420)}catch(e){}}}
+document.addEventListener('click',e=>{if(e.target.closest('button'))tone(700,.1,.05,'square')});
+/* Data */
+const T=[
+{k:'dd',s:'Seret (atau ketuk) jawaban ke kotak yang tepat. Barisan 3, 7, 11, 15, …',t:'Beda barisan b = [0] dan suku ke-10 (U10) = [1].',c:['4','39','5','43','12'],a:['4','39'],e:'b = 7 − 3 = 4. U10 = a + 9b = 3 + 9·4 = 39.'},
+{k:'dd',s:'Tabungan Rani minggu ke-1 Rp10.000 dan naik tetap tiap minggu menjadi Rp15.000, Rp20.000, …',t:'Kenaikan tiap minggu = Rp[0] ribu, tabungan minggu ke-8 = Rp[1] ribu.',c:['5','45','50','40','8'],a:['5','45'],e:'b = 5 ribu. U8 = 10 + 7·5 = 45 ribu.'},
+{k:'dd',s:'Deret 2 + 4 + 6 + … + 20 menggambarkan 2 kursi pada baris pertama, bertambah 2 tiap baris.',t:'Banyak baris n = [0] dan jumlah seluruh kursi S10 = [1].',c:['10','110','100','22','20'],a:['10','110'],e:'Un = 2n = 20 maka n = 10. S10 = 10/2 · (2 + 20) = 110.'},
+{k:'mt',s:'Jodohkan situasi dengan beda (b) barisannya.',p:[['Gaji naik Rp200 ribu tiap tahun','200'],['Suhu turun 3°C tiap naik 1 km','−3'],['Tinggi anak tangga bertambah 18 cm','18']],e:'Beda adalah selisih tetap: naik berarti positif, turun berarti negatif.'},
+{k:'mt',s:'Jodohkan barisan dengan suku ke-5 (U5).',p:[['5, 8, 11, …','17'],['20, 17, 14, …','8'],['2, 6, 10, …','18']],e:'U5 = a + 4b: 5+4·3 = 17; 20+4·(−3) = 8; 2+4·4 = 18.'},
+{k:'mt',s:'Jodohkan deret dengan jumlahnya.',p:[['1 + 2 + 3 + … + 10','55'],['2 + 4 + 6 + 8 + 10','30'],['5 + 10 + 15 + 20','50']],e:'Sn = n/2 · (a + Un): 10/2·11 = 55; 5/2·12 = 30; 4/2·25 = 50.'},
+{k:'od',s:'Urutkan langkah menentukan U20 barisan 4, 9, 14, …',i:['Tentukan a = 4','Hitung b = 9 − 4 = 5','Tulis rumus Un = a + (n − 1)b','Substitusi: U20 = 4 + 19·5','Hasil: U20 = 99'],e:'Cari a dan b dahulu, lalu rumus, substitusi, hasil.'},
+{k:'od',s:'Urutkan nilai suku ke-6 (U6) dari yang terkecil ke terbesar.',i:['30, 25, 20, … → 5','3, 5, 7, … → 13','1, 4, 7, … → 16','2, 6, 10, … → 22'],e:'U6 = a + 5b: 30−25 = 5; 3+10 = 13; 1+15 = 16; 2+20 = 22.'},
+{k:'od',s:'Urutkan langkah menghitung S10 deret 5 + 8 + 11 + …',i:['a = 5 dan b = 3','U10 = 5 + 9·3 = 32','S10 = 10/2 · (5 + 32)','S10 = 5 · 37 = 185'],e:'Setelah a dan b, cari U10, lalu pakai rumus Sn.'}];
+const st1='<div class=stim><b>Wacana.</b> Aula SMA Negeri 15 Maluku Tengah memiliki 12 baris kursi. Baris pertama berisi 20 kursi, baris kedua 23 kursi, baris ketiga 26 kursi, dan seterusnya dengan pola tetap.</div>';
+const st2='<div class=stim><b>Tabel tabungan Ali (ribuan rupiah)</b><table><tr><th>Minggu</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><th>Saldo</th><td>15</td><td>20</td><td>25</td><td>30</td><td>35</td></tr></table></div>';
+const E=[
+{k:'mc',st:st1,q:'Beda banyak kursi antarbaris adalah …',o:['2','3','4','5','6'],a:1,e:'b = 23 − 20 = 3.'},
+{k:'mc',st:st1,q:'Banyak kursi pada baris ke-12 adalah …',o:['50','51','52','53','54'],a:3,e:'U12 = 20 + 11·3 = 53.'},
+{k:'mc',st:st1,q:'Jumlah seluruh kursi di aula adalah …',o:['420','428','438','448','456'],a:2,e:'S12 = 12/2 · (20 + 53) = 6 · 73 = 438.'},
+{k:'mc',st:st2,q:'Jika pola berlanjut, saldo Ali pada minggu ke-10 (ribu rupiah) adalah …',o:['55','58','60','62','65'],a:2,e:'a = 15, b = 5. U10 = 15 + 9·5 = 60.'},
+{k:'mc',st:st2,q:'Jumlah saldo minggu ke-1 sampai ke-10 (ribu rupiah) adalah …',o:['350','365','375','380','400'],a:2,e:'S10 = 10/2 · (15 + 60) = 5 · 75 = 375.'},
+{k:'tf',q:'Barisan 2, 5, 8, 11, … adalah barisan aritmetika dengan beda 3.',a:1,e:'Selisih tiap suku berurutan selalu 3.'},
+{k:'tf',q:'Barisan 1, 2, 4, 8, … adalah barisan aritmetika.',a:0,e:'Selisihnya 1, 2, 4 (tidak tetap). Itu barisan geometri.'},
+{k:'tf',q:'Jumlah 10 suku pertama deret 3 + 6 + 9 + … adalah 165.',a:1,e:'S10 = 10/2 · (2·3 + 9·3) = 5 · 33 = 165.'}];
+const M=[
+'<h2>1. Barisan Aritmetika</h2><p>Barisan aritmetika adalah barisan bilangan yang selisih dua suku berurutannya selalu tetap. Selisih itu disebut <b>beda</b>.</p><div class=f>\\(b=U_n-U_{n-1}\\) &nbsp; dan &nbsp; \\(U_n=a+(n-1)b\\)</div><p>Contoh: 3, 7, 11, 15, … maka a = 3, b = 4, dan \\(U_{10}=3+9\\cdot4=39\\).</p><svg viewBox="0 0 300 90" width="260"><g fill="#6c5ce7"><rect x="10" y="70" width="50" height="15"/><rect x="70" y="55" width="50" height="30" fill="#00b8d9"/><rect x="130" y="40" width="50" height="45"/><rect x="190" y="25" width="50" height="60" fill="#00b8d9"/></g><text x="10" y="20" font-size="12" fill="currentColor">Anak tangga naik dengan selisih tetap</text></svg>',
+'<h2>2. Deret Aritmetika</h2><p>Deret aritmetika adalah jumlah suku-suku barisan aritmetika.</p><div class=f>\\(S_n=\\frac{n}{2}(a+U_n)=\\frac{n}{2}\\left(2a+(n-1)b\\right)\\)</div><p>Contoh: 2 + 4 + … + 20 → \\(S_{10}=\\frac{10}{2}(2+20)=110\\).</p><p>Cerita Gauss: 1 + 2 + … + 100 dipasangkan (1+100), (2+99), … ada 50 pasang bernilai 101, jadi jumlahnya 5.050.</p>',
+'<h2>3. Menyelesaikan Masalah</h2><p>Langkah mudah: <b>(1)</b> tulis yang diketahui a, b, n; <b>(2)</b> pilih Un (suku ke-n) atau Sn (jumlah); <b>(3)</b> substitusi; <b>(4)</b> tulis kesimpulan.</p><div class=f>Tabungan Rani minggu ke-1 Rp10.000, naik Rp5.000 tiap minggu.<br>a = 10, b = 5 (ribu). \\(U_8=10+7\\cdot5=45\\) ribu.<br>Total 8 minggu: \\(S_8=\\frac{8}{2}(10+45)=220\\) ribu.</div><p>Sekarang uji dirimu di menu Tantangan!</p>'];
+/* Screens */
+const V={
+cover:()=>`<div class=cover><div class=cube><i>a</i><i>b</i><i>U</i><i>S</i><i>n</i><i>+</i></div><h1 class=ttl>${[...'Barisan & Deret Aritmetika'].map((c,i)=>c==' '?' ':`<span style="animation-delay:${i*.08}s">${c}</span>`).join('')}</h1><p>Media Pembelajaran Interaktif · Matematika Umum · Kelas XI Fase F</p><button class="b go" onclick="music(true);go('id')">▶ MULAI</button></div>`,
+id:()=>`<h2>👤 Identitas Peserta Didik</h2><label>Nama Lengkap</label><input id=nm value="${S.name}" placeholder="Tulis nama lengkapmu"><label>Kelas</label><input id=kl value="${S.kelas}" placeholder="Contoh: XI F4"><label>Sekolah</label><input id=sc value="${S.sch}"><p id=er class=bad></p><button class="b g" onclick="saveId()">Lanjut ▶</button>`,
+menu:()=>`<h2>Halo, ${S.name||'Siswa'}! Pilih menu 👇</h2><div class=grid>${[['🎯','Tujuan','tj'],['📖','Materi','mat'],['🧩','Tantangan','tan'],['📝','Evaluasi','evl'],['🏆','Hasil & Sertifikat','has'],['❓','Petunjuk','pet'],['👩‍🏫','Pengembang','dev']].map(m=>`<button class=mc onclick="go('${m[2]}')"><big>${m[0]}</big>${m[1]}</button>`).join('')}</div>`,
+tj:()=>`<h2>🎯 Tujuan Pembelajaran</h2><div class=f>1. Menentukan barisan dan deret aritmetika dengan benar.</div><div class=f>2. Menyelesaikan masalah yang berkaitan dengan barisan dan deret aritmetika.</div><button class="b" onclick="go('mat')">Belajar Materi ▶</button>`,
+mat:(p=0)=>`<span class=tag>Materi ${p+1}/3</span>${M[p]}<div class=row>${p>0?`<button class=b onclick="go('mat',${p-1})">◀ Sebelumnya</button>`:''}${p<2?`<button class=b onclick="go('mat',${p+1})">Berikutnya ▶</button>`:`<button class="b g" onclick="go('tan')">Ke Tantangan ▶</button>`}</div>`,
+tan:()=>`<h2>🧩 Tantangan Interaktif</h2><p>9 soal: seret &amp; letakkan (3), menjodohkan (3), mengurutkan (3). Siap?</p><button class="b g" onclick="runQ(T,0,'T')">Mulai Tantangan ▶</button>`,
+evl:()=>`<h2>📝 Evaluasi</h2><p>8 soal: 5 pilihan ganda (stimulus wacana dan tabel) dan 3 benar/salah.</p><button class="b g" onclick="runQ(E,0,'E')">Mulai Evaluasi ▶</button>`,
+has:()=>{const[t,e,n]=sums();return`<div class=cover><h2>🏆 Skor Akhir</h2><div class=big>${n}</div><p>Tantangan: ${t}/9 · Evaluasi: ${e}/8<br>${n>=85?'Luar biasa! 🌟':n>=70?'Bagus, pertahankan! 👍':'Ayo belajar lagi, kamu pasti bisa! 💪'}</p><div class=row><button class="b g" onclick="cert()">⬇ Unduh Sertifikat (PDF)</button><button class=b onclick="go('menu')">🗺 Kembali ke menu</button></div></div>`},
+pet:()=>`<h2>❓ Petunjuk Penggunaan</h2><div class=f>1. Isi identitas, lalu pilih menu.<br>2. Baca Tujuan dan Materi terlebih dahulu.<br>3. Tantangan: seret/ketuk jawaban, pilih dari daftar, atau gunakan tombol ▲▼ untuk mengurutkan. Tekan <b>Periksa</b> untuk melihat kunci dan pembahasan.<br>4. Evaluasi: pilih satu jawaban lalu tekan <b>Periksa</b>.<br>5. Buka menu Hasil untuk skor dan sertifikat PDF.<br>6. Tombol 🎵 menyalakan musik, tombol ↺ Reset mengulang dari awal.</div>`,
+dev:()=>`<h2>👩‍🏫 Pengembang</h2><div class=f><b>Nureni, S.Pd</b><br>Guru Mata Pelajaran Matematika Umum<br>SMA Negeri 15 Maluku Tengah<br>Media untuk kelas XI Fase F · Semester Ganjil 2026/2027</div>`};
+/* Core */
+function init(){S={name:'',kelas:'',sch:'SMA Negeri 15 Maluku Tengah',sc:{}};go('cover')}
+function go(n,a){cur=n;$('#v').innerHTML=V[n](a);$('#nav').style.display=(n=='cover'||n=='id')?'none':'flex';tx();window.scrollTo(0,0)}
+function saveId(){const n=$('#nm').value.trim();if(!n){$('#er').textContent='Nama lengkap wajib diisi.';return}S.name=n;S.kelas=$('#kl').value.trim()||'-';S.sch=$('#sc').value.trim()||'-';go('menu')}
+function sums(){let t=0,e=0;for(const k in S.sc){k[0]=='T'?t+=S.sc[k]:e+=S.sc[k]}return[t,e,Math.round((t+e)/17*100)]}
+const R={
+dd:q=>{S.cq.sl=q.a.map(()=>null);return`<p>${q.s}</p><p>${q.t.replace(/\[(\d)\]/g,(m,i)=>`<span class=slot data-i=${i} ondragover="event.preventDefault()" ondrop="drop(event,${i})" onclick="slotClick(${i})">…</span>`)}</p><div class=bank>${q.c.map((c,j)=>`<button class=chip id=c${j} draggable=true ondragstart="event.dataTransfer.setData('t',${j})" onclick="pick(${j})">${c}</button>`).join('')}</div>`},
+mt:q=>{const o=shuf(q.p.map(x=>x[1]));return`<p>${q.s}</p>`+q.p.map((x,i)=>`<div class=mr><span>${x[0]}</span><select id=m${i}><option value="">Pilih…</option>${o.map(v=>`<option>${v}</option>`).join('')}</select></div>`).join('')},
+od:q=>{const c=S.cq;c.ar=shuf(q.i);while(c.ar.join()==q.i.join())c.ar=shuf(q.i);return`<p>${q.s}</p><div id=ol></div>`},
+mc:q=>`${q.st}<p><b>${q.q}</b></p>`+q.o.map((t,j)=>`<label class=op><input type=radio name=o value=${j} style="width:auto;margin:0 8px 0 0"> ${'ABCDE'[j]}. ${t}</label>`).join(''),
+tf:q=>`<p><b>${q.q}</b></p><label class=op><input type=radio name=o value=1 style="width:auto;margin:0 8px 0 0"> Benar</label><label class=op><input type=radio name=o value=0 style="width:auto;margin:0 8px 0 0"> Salah</label>`};
+function runQ(L,i,m){S.cq={L,i,m,done:0};sel=null;const q=L[i];$('#v').innerHTML=`<span class=tag>${m=='T'?'Tantangan':'Evaluasi'} · Soal ${i+1}/${L.length}</span>${R[q.k](q)}<div id=fb></div><div class=row id=act><button class=b id=ck onclick="check()">Periksa</button></div>`;if(q.k=='od')paintOD();tx();window.scrollTo(0,0)}
+function pick(j){sel=j;document.querySelectorAll('.chip').forEach(b=>b.classList.toggle('sel',b.id=='c'+j))}
+function put(i,j){const c=S.cq;if(c.done)return;const o=c.sl.indexOf(j);if(o>-1)c.sl[o]=null;c.sl[i]=j;sel=null;paintDD()}
+function drop(e,i){e.preventDefault();put(i,+e.dataTransfer.getData('t'))}
+function slotClick(i){const c=S.cq;if(c.done)return;if(sel!==null)put(i,sel);else{c.sl[i]=null;paintDD()}}
+function paintDD(){const c=S.cq,q=c.L[c.i];document.querySelectorAll('.slot').forEach(s=>{const v=c.sl[s.dataset.i];s.textContent=v==null?'…':q.c[v]});document.querySelectorAll('.chip').forEach((b,j)=>{b.classList.toggle('used',c.sl.includes(j));b.classList.remove('sel')})}
+function paintOD(){const c=S.cq;$('#ol').innerHTML=c.ar.map((t,k)=>`<div class=or><b>${k+1}</b><span>${t}</span><button class=sm onclick="mv(${k},-1)">▲</button><button class=sm onclick="mv(${k},1)">▼</button></div>`).join('')}
+function mv(k,d){const c=S.cq,a=c.ar,j=k+d;if(c.done||j<0||j>=a.length)return;[a[k],a[j]]=[a[j],a[k]];paintOD()}
+function check(){const c=S.cq,q=c.L[c.i];if(c.done)return;let ok,ans=true,key;
+if(q.k=='dd'){ans=c.sl.every(v=>v!=null);ok=ans&&c.sl.every((v,i)=>q.c[v]==q.a[i]);key=q.a.join(' dan ')}
+else if(q.k=='mt'){const v=q.p.map((x,i)=>$('#m'+i).value);ans=v.every(x=>x);ok=ans&&v.every((x,i)=>x==q.p[i][1]);key=q.p.map(x=>x[0]+' → '+x[1]).join('<br>')}
+else if(q.k=='od'){ok=c.ar.join('|')==q.i.join('|');key=q.i.map((t,k)=>(k+1)+'. '+t).join('<br>')}
+else{const r=document.querySelector('input[name=o]:checked');ans=!!r;ok=ans&&+r.value==q.a;key=q.k=='mc'?'ABCDE'[q.a]+'. '+q.o[q.a]:(q.a?'Benar':'Salah')}
+if(!ans){$('#fb').innerHTML='<p class=bad>Jawab dulu ya 🙂</p>';return}
+c.done=1;S.sc[c.m+c.i]=ok?1:0;
+$('#fb').innerHTML=`<div class="fb ${ok?'okb':'badb'}"><b>${ok?'✅ Benar! Hebat!':'❌ Belum tepat, ayo pelajari pembahasannya.'}</b><br><b>Kunci:</b> ${key}<br><b>Pembahasan:</b> ${q.e}</div>`;
+const last=c.i+1>=c.L.length;$('#act').innerHTML=`<button class="b g" onclick="${last?(c.m=='T'?"go('menu')":"go('has')"):`runQ(${c.m=='T'?'T':'E'},${c.i+1},'${c.m}')`}">${last?(c.m=='T'?'Selesai · ke Menu':'Lihat Skor Akhir'):'Lanjut ▶'}</button>`;tx()}
+async function cert(){try{const J=window.jspdf.jsPDF,d=new J({orientation:'landscape',unit:'mm',format:'a4'}),[t,e,n]=sums();
+d.setFillColor(238,244,255);d.rect(0,0,297,210,'F');d.setDrawColor(108,92,231);d.setLineWidth(2.5);d.rect(8,8,281,194);d.setDrawColor(0,184,217);d.setLineWidth(.8);d.rect(13,13,271,184);
+d.setFillColor(108,92,231);d.rect(13,13,271,12,'F');d.setTextColor(255,255,255);d.setFont('helvetica','bold');d.setFontSize(12);d.text('SMA NEGERI 15 MALUKU TENGAH · MATEMATIKA UMUM · FASE F',148.5,21,{align:'center'});
+d.setTextColor(108,92,231);d.setFontSize(40);d.text('SERTIFIKAT',148.5,50,{align:'center'});
+d.setTextColor(60,70,100);d.setFont('helvetica','normal');d.setFontSize(14);d.text('Diberikan kepada:',148.5,68,{align:'center'});
+d.setTextColor(0,140,170);d.setFont('helvetica','bold');d.setFontSize(30);d.text(S.name,148.5,86,{align:'center'});
+d.setDrawColor(0,184,217);d.line(70,90,227,90);
+d.setTextColor(60,70,100);d.setFont('helvetica','normal');d.setFontSize(14);d.text('Kelas '+S.kelas+' · '+S.sch,148.5,100,{align:'center'});
+d.text('telah menyelesaikan Media Pembelajaran Interaktif',148.5,114,{align:'center'});
+d.setFont('helvetica','bold');d.setFontSize(18);d.text('Barisan dan Deret Aritmetika',148.5,124,{align:'center'});
+d.setTextColor(108,92,231);d.setFontSize(44);d.text(String(n),148.5,150,{align:'center'});
+d.setTextColor(60,70,100);d.setFont('helvetica','normal');d.setFontSize(12);d.text('Skor Akhir (Tantangan '+t+'/9 · Evaluasi '+e+'/8)',148.5,159,{align:'center'});
+d.text(new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}),230,172,{align:'center'});d.text('Guru Mata Pelajaran',230,179,{align:'center'});
+d.setFont('helvetica','bold');d.text('Nureni, S.Pd',230,192,{align:'center'});
+const fn='Sertifikat-'+S.name.replace(/\W+/g,'-')+'.pdf',dl=window.claude?await claude.use('downloads'):null;
+if(dl)await dl.save({filename:fn,data:d.output('blob')});else d.save(fn)}catch(x){if(!x||x.code!='declined')alert('Sertifikat belum dapat dibuat. Coba lagi sebentar.')}}
+init();
+</script></body></html>
